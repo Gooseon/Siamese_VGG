@@ -173,6 +173,6 @@ with tf.Session() as sess:
                        x1: batch_x11,
                        y_: batch_y
                        })
-        print('step %d: loss %.3f' % (step, train_loss))
+        print('step %d: loss %.3f' % (step, train_loss)) 
 train_writer.close()
 test_writer.close()
