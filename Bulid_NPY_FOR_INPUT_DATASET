@@ -1,0 +1,44 @@
+import numpy as np
+import os
+import random
+import shutil
+import cv2
+
+# Make npy
+base_path = '/home/yangguang/PycharmProjects/siamese_tf_mnist/Radiomatic_data' # FIND DATA PATH
+
+batch_file_0 = os.path.join(base_path,'0')  # JOIN SPECIFIED DATA PATH INTO BASE DATA PATH
+batch_file_1 = os.path.join(base_path,'1')
+
+file_0 = os.listdir(batch_file_0)   # BUILD A LIST OF FILE AND FOLDERS OF SPECIFIED PATH
+file_1 = os.listdir(batch_file_1)
+
+batch_x0 = np.zeros((len(file_0),150, 150))  # BUILD A MATRIX WHICH SIZE IS FILE_NUMBER * HEIGHT * WEIGHT
+batch_y0 = np.zeros((len(file_0),1))
+batch_x1 = np.zeros((len(file_1),150,150))
+batch_y1 = np.zeros((len(file_1),1))
+
+count_0, count_1 = 0, 0
+
+# LOAD IMAGES
+for i in file_0:
+    img = cv2.imread(os.path.join(batch_file_0,i))  # READ IMAGES
+    img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)  # READ IMAGES BY GRAY_COLOR FORMAT
+    batch_x0[count_0] = img    # USE BATCH_X[] TO SAVE IMAGES' INFO
+    batch_y0[count_0] = int(i[0])   # USE BATCH_Y[] TO SAVE IMAGES' LABELS(WHERE 'INT' IS USED TO LOAD IMAGES' NAME ONLY HAVE NUMBER WITHOUT OTHERS)
+    count_0 +=1
+
+for j in file_1:
+    img = cv2.imread(os.path.join(batch_file_1,j))
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    batch_x1[count_1] = img
+    batch_y1[count_1] = int(j[0])
+    count_1 +=1
+
+
+# SAVE IMAGE_INFO AND LABEL_INFO INTO NPY FORMAT
+np.save('mnbatch_x0.npy',batch_x0)
+np.save('mnbatch_x1.npy',batch_x1)
+
+np.save('mnbatch_y0.npy',batch_y0)
+np.save('mnbatch_y1.npy',batch_y1)
